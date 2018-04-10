@@ -6,28 +6,32 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
-  <body>
-    <h1>Hello Electron default is changed </h1>
-    <div ng-app="myApp" ng-controller="customersCtrl"> 
-      <input type="text" id="myInput" ng-model="myInput" ng-change="searchDB()">
+
+  <body class="container">
+    <div class="form-group">
+      <div><h1>Hello Electron default is changed <h1></div>
+    </div>
+    <div ng-app="myApp" ng-controller="customersCtrl" class="form-group"> 
+      <input type="text" id="myInput" ng-model="myInput" class="form-control" placeholder="Search here..." ng-change="searchDB();$event.preventDefault()">
         <table>
           <tr ng-repeat="x in dbData">
               <td>{{x.id}}</td>
               <td>{{x.email}}</td>
               <td>{{x.name}}</td>
-              <td><input type="button" ng-model="btndata" name="btndata" value="Add" ng-click="addList(x)"></td>
+              <td><input type="button" ng-model="addbtn" name="addbtn" class="btn btn-primary" value="Add" ng-click="addList(x)"></td>
           </tr>
         </table>
         <div id="printableArea">
-          <h1>Data in cart </h1>
+        <div><h3>Data in cart </h3></div>
           <table>
           <tr ng-repeat="x in cartData">
               <td>{{x.id}}</td>
               <td>{{x.email}}</td>
               <td>{{x.name}}</td>
+              <td><input type="button" ng-model="rmbtn" name="rmbtn" value="Remove" class="btn btn-primary" ng-click="removeList(x)"></td>
           </tr>
         </table>
-        <button onclick="window.print();">Print Div</button>
+        <button onclick="window.print()" class="btn btn-primary">Print Div</button>
         </div>
     </div>
 
@@ -46,14 +50,15 @@
             console.log('Searching for  '+searchId)
             var srcdo = "'%"+searchId+"%'";
             // Add the credentials to access your database
-            var connection = mysql.createConnection({
+            if(searchId.trim()){
+              var connection = mysql.createConnection({
                 host     : 'localhost',
                 user     : 'root',
                 password : 'root', // or the original password : 'apaswword'
                 database : 'test_db'
             });
 
-          // connect to mysql
+            // connect to mysql
             connection.connect(function(err) {
                 // in case of error
                 if(err){
@@ -62,7 +67,7 @@
                 }
             });
 
-          // Perform a query
+            // Perform a query
             q = 'SELECT * FROM `user` where name like ';
             finalQuery= q.concat(srcdo);
             console.log('Final query is : '+ finalQuery);
@@ -82,11 +87,12 @@
                 // printdata(rows);
             });
 
-          // Close the connection
-          connection.end(function(){
-              // The connection has been closed
-          });
-      }
+              // Close the connection
+              connection.end(function(){
+                // The connection has been closed
+              });
+            }
+          }
 
         $scope.updateData=function(data){
           $scope.dbData=data;
@@ -97,35 +103,12 @@
           console.log("In addList function")
           $scope.cartData[x.id]=x
           console.log(JSON.stringify($scope.cartData));
-          // if($scope.cartData.length == 0){
-          //   $scope.cartData.push(x);
-          //   console.log("adding item to cart first time : " + JSON.stringify(x));
-
-          // }else{
-          //    angular.forEach($scope.cartData,function(value,index){
-          //       console.log("forEach value " + value.id)
-          //       if(value.id == x.id){
-          //         console.log("Checking for ID : " + x.id)
-          //         console.log("item already exists" + value.id );
-          //       }else{
-          //         console.log("Checking for ID : " + x.id)
-          //         console.log("existing id " + JSON.stringify($scope.cartData))
-          //         console.log("adding item to cart : " + JSON.stringify(x));
-          //         $scope.cartData.push(x);
-          //         $scope.myList.push(x.id);
-          //      }
-          //   })
-          // }
-          // for(var index in cartData){
-          //   console.log("For loop");
-          //   if(cartData[index].id == x.id ){
-          //     console.log("item already exists" + cartData[index].id );
-          //   }else{
-          //     console.log("adding item to cart : " + x);
-          //     $scope.cartData.push(x);
-          //      $scope.myList.push(x.id);
-          //   }
-          // }
+        }
+        
+        $scope.removeList=function(x){
+          console.log("In removeList function")
+          delete $scope.cartData[x.id];
+          console.log(JSON.stringify($scope.cartData));
         }
 
     });
@@ -135,5 +118,6 @@
       // You can also require other files to run in this process
       require('./renderer.js')
     </script>
+
   </body>
 </html>
