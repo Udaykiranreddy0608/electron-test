@@ -1,9 +1,17 @@
+Login info 
+-----------------------
+fname | lname | username  | password  | email | question1 | answer1
+
 User info 
 -----------------
-userid | fname | lname | age | sex | reference | email | remarks 
-(U ID)
+userid      | fname | lname | age | sex | reference | email | mobile | blood group | other health issues | address | remarks 
+(Unique ID)
 
 
 Inventory 
 ---------------
-U.ID	| tab_name | purpose 
+InventoryID	| tab_name | purpose  | manufacturer 
+(unique ID)
+
+
+
