@@ -1,4 +1,4 @@
-# electron-test
+# electron-simple app
 
 
 Package steps 
