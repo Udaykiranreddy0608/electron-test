@@ -1,0 +1,9 @@
+User info 
+-----------------
+userid | fname | lname | age | sex | reference | email | remarks 
+(U ID)
+
+
+Inventory 
+---------------
+U.ID	| tab_name | purpose 
